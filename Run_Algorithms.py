@@ -9,16 +9,21 @@ import FindPeaks as fp
 
 
 # Generate a synthetic data
-L = 100 
-spike = 3
+L = 1000
 s = np.random.randn(L)
 x_axis = np.arange(L)
+s[100] = 3
+s[200] = 5
+s[505] = 6
+
+
 # find spike value and its index in data
 output = fp.FindSpike(s)
 
 print(output)
 plt.plot(x_axis,s)
-plt.plot(x_axis,s[peakIndex])
+#TODO : mark the spike on the plot 
+# plt.plot(x_axis,s[peakIndex])
 plt.show()
 
 
