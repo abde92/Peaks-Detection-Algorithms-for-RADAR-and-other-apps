@@ -47,17 +47,17 @@ plt.title("Multpile Peaks Finding Based Median-Basline lgorithm ")
 plt.show()
 
 # ----- Multiple Peaks Finding - Noisy Peaks - Baseline = Average-----#
- 
-# peakIndices_Smoth = fp.FindPeaks_Basline_Smoth(s)
-# plt.plot(x_axis,s)
+
+peakIndices_Smoth, smoothed_s = fp.FindPeaks_Basline_Smoth(s)
+plt.plot(x_axis,s, color='b', label='Signal')
+plt.plot(x_axis,smoothed_s,color='k', label='Smoothed signal')
 # #TODO : mark peaks on the plot - Done
-# plt.plot(x_axis[peakIndices_Md],s[peakIndices_Md],'rD')
-# plt.xlabel('Time(ms)') 
-# plt.ylabel('Amplitude(mV)') 
-# plt.title("Multpile Peaks Finding Based Median-Basline lgorithm ")
-# plt.show()
-
-
+plt.plot(x_axis[peakIndices_Smoth],smoothed_s[peakIndices_Smoth],'rD', label='Peaks')
+plt.xlabel('Time(ms)') 
+plt.ylabel('Amplitude(mV)') 
+plt.title("Multpile Peaks Finding Based  Smoothing and Average-Basline lgorithm ")
+plt.legend()
+plt.show()
 
 #### Real FMCW RADAR data
 # data_re = pd.read_csv('IQdata.csv')

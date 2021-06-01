@@ -1,6 +1,7 @@
-# In this module we implement different algorithms to find peaks in a mezasured signal
+# Peaks finding algorithms
 # Details of these algorithms can be found in this link: https://www.baeldung.com/cs/signal-peak-detection
 import numpy as np
+import pandas as pd
 import scipy as sp
 import statistics
 
@@ -68,39 +69,37 @@ def FindPeaks_Basline_Md(data):
 #4. Algorithm : Multiple Noisy Peaks Finding (Baseline =  Median)=
  # Input : Measured Data
  # Output : Peaks indices
-def smooth(y, box_pts):
-    box = np.ones(box_pts)/box_pts
-    y_smooth = np.convolve(y, box, mode='same')
-    return y_smooth
-
 def FindPeaks_Basline_Smoth(data):
-    smoothed = []
+    #smoothed = []
     peaksIndices = []
     peak_id = 0
     peak_V = 0
     baseline = statistics.mean(data)
     
     #TODO : Somth data using a moving average 
-    for id in range(len(data)):
+    # for id in range(len(data)):
 
         
-        # smoothed.append(statistics.mean(data[id-2]))
-        # smoothed.append(statistics.mean(data[id-1]))
-        # smoothed.append(statistics.mean(data[id]))
-        # smoothed.append(statistics.mean(data[id+1]))
-        smoothed.append(statistics.mean(data[id+2]))
+    #     # smoothed.append(statistics.mean(data[id-2]))
+    #     # smoothed.append(statistics.mean(data[id-1]))
+    #     # smoothed.append(statistics.mean(data[id]))
+    #     # smoothed.append(statistics.mean(data[id+1]))
+    #     smoothed.append(statistics.mean(data[id+2]))
+    data = pd.DataFrame(data)
+    smoothed1 = data.rolling(window=5).mean()
+    smoothed = smoothed1.to_numpy()
 
     for id in range(len(smoothed)):
         if  smoothed[id] > baseline: 
             if peak_V == 0 or smoothed[id] > peak_V:
                 peak_id = id
-                peak_V = data[id]
+                peak_V = smoothed[id]
 
-        elif data[id] < baseline and peak_id != 0:
+        elif smoothed[id] < baseline and peak_id != 0:
             peaksIndices.append(peak_id)        
             peak_id = 0
             peak_V = 0
     if peak_id != 0: 
         peaksIndices.append(peak_id)       
 
-    return peaksIndices
+    return peaksIndices, smoothed
