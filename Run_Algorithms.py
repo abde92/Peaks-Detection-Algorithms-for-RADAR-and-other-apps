@@ -8,15 +8,15 @@ import matplotlib.pyplot as plt
 import FindPeaks as fp
 
 #### Synthetic data
-L = 1000
+L = 100
 s = np.random.randn(L)
 x_axis = np.arange(L)
-s[100] = 3
-s[200] = 5
-s[505] = 6
+
+s[10:30] = 8
 
 # ----------------------Find Spike ---------------------#
 SpikeIndex,SpikeValue = fp.FindSpike(s)
+plt.figure(1)
 plt.plot(x_axis,s)
 #TODO : mark the spike on the plot -Done
 plt.plot(x_axis[SpikeIndex],s[SpikeIndex],'rD')
@@ -27,6 +27,7 @@ plt.show()
 
 # ----- Multiple Peaks Finding - Baseline = Average-----#
 peakIndices_Av = fp.FindPeaks_Basline_Av(s)
+plt.figure(2)
 plt.plot(x_axis,s)
 #TODO : mark peaks on the plot - Done
 plt.plot(x_axis[peakIndices_Av],s[peakIndices_Av],'rD')
@@ -38,6 +39,7 @@ plt.show()
 # ----- Multiple Peaks Finding - Baseline = Median-----#
 
 peakIndices_Md = fp.FindPeaks_Basline_Md(s)
+plt.figure(3)
 plt.plot(x_axis,s)
 #TODO : mark peaks on the plot - Done
 plt.plot(x_axis[peakIndices_Md],s[peakIndices_Md],'rD')
@@ -49,15 +51,37 @@ plt.show()
 # ----- Multiple Peaks Finding - Noisy Peaks - Baseline = Average-----#
 
 peakIndices_Smoth, smoothed_s = fp.FindPeaks_Basline_Smoth(s)
-plt.plot(x_axis,s, color='b', label='Signal')
+
+fig4 = plt.figure(4)
+plt.subplot(211)
+plt.plot(x_axis,s,'b--', label='Signal')
+plt.legend()
+plt.subplot(212)
 plt.plot(x_axis,smoothed_s,color='k', label='Smoothed signal')
 # #TODO : mark peaks on the plot - Done
 plt.plot(x_axis[peakIndices_Smoth],smoothed_s[peakIndices_Smoth],'rD', label='Peaks')
 plt.xlabel('Time(ms)') 
 plt.ylabel('Amplitude(mV)') 
-plt.title("Multpile Peaks Finding Based  Smoothing and Average-Basline lgorithm ")
+fig4.suptitle("Multpile Peaks Finding Based  Smoothing and Average-Basline Algorithm ")
 plt.legend()
 plt.show()
+
+# ----- Wide Peaks Finding - Baseline = Average-----#
+peakIndices_FWP = fp.FindWidePeaks(s)
+plt.figure(5)
+plt.plot(x_axis,s)
+#TODO : mark peaks on the plot - Done
+plt.plot(x_axis[peakIndices_FWP],s[peakIndices_FWP])
+plt.xlabel('Time(ms)') 
+plt.ylabel('Amplitude(mV)') 
+plt.title("Wide Peaks Finding Algorithm ")
+plt.show()
+
+# ----- Wide Peaks Finding - Dispersion by Standard Deviation -----#
+    #Inputs
+
+
+peaksFinding_Disp = fp.PeaksFinding_Dispersion(s,lag = 4,Influence = 0.7,Threshold = 3)
 
 #### Real FMCW RADAR data
 # data_re = pd.read_csv('IQdata.csv')

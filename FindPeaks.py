@@ -18,7 +18,7 @@ def FindSpike(data):
             peakIndex = id
     return peakIndex , peakValue
 
-#2. Algorithm : Multiple peaks finding (Baseline =  Average)
+#2.1 Algorithm : Multiple peaks finding (Baseline =  Average)
  # Input : Measured Data
  # Output : Peaks indices
 def FindPeaks_Basline_Av(data):
@@ -42,7 +42,7 @@ def FindPeaks_Basline_Av(data):
 
     return peaksIndexs
 
-#3. Algorithm : Multiple peaks finding (Baseline =  Median)
+#2.2 Algorithm : Multiple peaks finding (Baseline =  Median)
  # Input : Measured Data
  # Output : Peaks indices
 def FindPeaks_Basline_Md(data):
@@ -66,7 +66,7 @@ def FindPeaks_Basline_Md(data):
 
     return peaksIndices
 
-#4. Algorithm : Multiple Noisy Peaks Finding (Baseline =  Median)=
+#3. Algorithm : Multiple Noisy Peaks Finding (Baseline =  Median)=
  # Input : Measured Data
  # Output : Peaks indices
 def FindPeaks_Basline_Smoth(data):
@@ -103,3 +103,38 @@ def FindPeaks_Basline_Smoth(data):
         peaksIndices.append(peak_id)       
 
     return peaksIndices, smoothed
+
+    
+#4. Algorithm : Detecting Wide Peaks Algorithm
+ # Input : Measured Data
+ # Output : Peaks indices
+
+def FindWidePeaks(data):
+    peakIncices = []
+    baseline = statistics.mean(data)
+    for id in range(len(data)):
+        if  data[id] > baseline: 
+            peakIncices.append(id)        
+    return peakIncices
+
+#5. Algorithm : Dispersion by Standard Deviation
+ # Input 1 : Measured Data
+ # Input 2 : Lag
+ # Input 3 : Influence
+ # Input 4 : Threshold
+ # Output : Peaks indices
+def PeaksFinding_Dispersion(data,lag,Influence,Threshold):
+    peakIncices = []
+    processedSignal = data[0:lag]
+    for id in range(lag,len(data)):
+        y = data[id]
+        avr = statistics.mean(processedSignal[id-lag:id])
+        # TODO: Fix error provoked by variance in stdev
+        sd = statistics.stdev(processedSignal[id-lag:id])
+        if y-avr > sd*Threshold:
+            peakIncices.append(id)
+            adjustedValue = Influence*y + (1-Influence)*processedSignal[id-1]
+        else:
+            peakIncices.append(y)
+
+    return peakIncices
