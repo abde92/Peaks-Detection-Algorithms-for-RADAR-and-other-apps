@@ -1,5 +1,6 @@
 # Peaks finding algorithms
 # Details of these algorithms can be found in this link: https://www.baeldung.com/cs/signal-peak-detection
+# All functions here return peak indices, only naive peak finding it return both peak indice and peak value
 import numpy as np
 import pandas as pd
 import scipy as sp
@@ -117,16 +118,19 @@ def FindWidePeaks(data):
             peakIncices.append(id)        
     return peakIncices
 
-#5. Algorithm : Dispersion by Standard Deviation
+#5.1 Algorithm : Dispersion by Standard Deviation
  # Input 1 : Measured Data
  # Input 2 : Lag
  # Input 3 : Influence
  # Input 4 : Threshold
  # Output : Peaks indices
-def PeaksFinding_Dispersion(data,lag,Influence,Threshold):
+# This is my own DSD algorithm implementation, it does not work ; I
+#TODO: I  need to fix an error caused by variance in stdev !
+def PeaksFinding_Dispersion (data,lag,Influence,Threshold):
+    data = list(data)
     peakIncices = []
     processedSignal = data[0:lag]
-    for id in range(lag,len(data)):
+    for id in range(lag,len(data)+1):
         y = data[id]
         avr = statistics.mean(processedSignal[id-lag:id])
         # TODO: Fix error provoked by variance in stdev
@@ -135,6 +139,6 @@ def PeaksFinding_Dispersion(data,lag,Influence,Threshold):
             peakIncices.append(id)
             adjustedValue = Influence*y + (1-Influence)*processedSignal[id-1]
         else:
-            peakIncices.append(y)
+            np.append(processedSignal,y) 
 
     return peakIncices

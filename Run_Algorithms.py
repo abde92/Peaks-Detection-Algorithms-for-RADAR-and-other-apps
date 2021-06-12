@@ -25,7 +25,13 @@ def SineWAve(SampleRate,StartTime, EndTime,frq1,frq2,frq3):
 
 
 t_axis , s = SineWAve(SampleRate = 500,StartTime = 0, EndTime = 10 ,frq1 = 20, frq2 = 80, frq3 = 150)
+
+#### Synthetic data 3: sum of sine waves + noise (randone data)
+L = len(s)
+s  = s + np.random.randn(L)
+
 #### Real world data :  I/Q data of an FMCW RADAR
+
 
 # ----------------------Find Spike ---------------------#
 SpikeIndex,SpikeValue = fp.FindSpike(s)
@@ -90,15 +96,4 @@ plt.ylabel('Amplitude(mV)')
 plt.title("Wide Peaks Finding Algorithm ")
 plt.show()
 
-# ----- Wide Peaks Finding - Dispersion by Standard Deviation -----#
-    #Inputs
 
-
-# peaksFinding_Disp = fp.PeaksFinding_Dispersion(s,lag = 4,Influence = 0.7,Threshold = 3)
-
-#### Real FMCW RADAR data
-# data_re = pd.read_csv('IQdata.csv')
-# I_channel_signal= data_re.I_data
-# I_FFT = fft(I_channel_signal)
-# plt.plot(np.abs(I_FFT))
-# plt.show()
