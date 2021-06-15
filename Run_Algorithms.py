@@ -1,20 +1,18 @@
+# By Abderrahim BELISSAOUI
+# If you are student, feel free to use these codes
+# If you are professional, let me know , send message here abd.belissaoui@gmail
 # Run algorithms to find peaks 
 import numpy as np
 import scipy as sp
 import pandas as pd
 import math as mth
-from scipy.fft import fft, fftfreq
+from scipy.fft import fft, fftfreq, fftshift
 import matplotlib.pyplot as plt
 import FindPeaks as fp
 
-#### Synthetic data 1 : random data
-# L = 100
-# s = np.random.randn(L)
-# t_axis = np.arange(L)
-# s[10:15] = 4
-
-#### Synthetic data 2 : sum of sine waves
-
+# ------------------------------------------ Synthetic Data ---------------------------------#
+#### Synthetic data  : sum of sine waves
+# define a signal that contains 3 components
 def SineWAve(SampleRate,StartTime, EndTime,frq1,frq2,frq3):
     
     StepTime = 50/SampleRate
@@ -26,12 +24,21 @@ def SineWAve(SampleRate,StartTime, EndTime,frq1,frq2,frq3):
 
 t_axis , s = SineWAve(SampleRate = 500,StartTime = 0, EndTime = 10 ,frq1 = 20, frq2 = 80, frq3 = 150)
 
-#### Synthetic data 3: sum of sine waves + noise (randone data)
+# Add random signal ( Noise)
 L = len(s)
 s  = s + np.random.randn(L)
 
-#### Real world data :  I/Q data of an FMCW RADAR
+# ------------------------------------------ FMCW RADAR raw data ---------------------------------#
+# Read csv data
+# Download RADAR I/Q data : https://drive.google.com/file/d/1FiApaaWw0SeDA2giC1a6G4EUcVcLrwZ6/view?usp=sharing
 
+IQ_data = pd.read_csv('/Your data directory here/IQdata.csv', usecols = ["I", "Q"] )
+IQ_raw_data = IQ_data["I"] + 1j*IQ_data["Q"]
+IQ_FFT = fftshift(fft(np.array(IQ_raw_data)))
+s = np.abs(IQ_FFT)
+freq = fftshift(fftfreq(IQ_raw_data.shape[-1]))
+t_axis = freq 
+#TODO: Define frequencies axis then range axis;  Status: Done
 
 # ----------------------Find Spike ---------------------#
 SpikeIndex,SpikeValue = fp.FindSpike(s)
