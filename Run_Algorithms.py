@@ -32,11 +32,15 @@ s  = s + np.random.randn(L)
 # Read csv data
 # Download RADAR I/Q data : https://drive.google.com/file/d/1FiApaaWw0SeDA2giC1a6G4EUcVcLrwZ6/view?usp=sharing
 
-IQ_data = pd.read_csv('/Your data directory here/IQdata.csv', usecols = ["I", "Q"] )
+IQ_data = pd.read_csv('/home/vibraf/SelfLearning/Datasets/IQdata.csv', usecols = ["I", "Q"] )
 IQ_raw_data = IQ_data["I"] + 1j*IQ_data["Q"]
-IQ_FFT = fftshift(fft(np.array(IQ_raw_data)))
-s = np.abs(IQ_FFT)
-freq = fftshift(fftfreq(IQ_raw_data.shape[-1]))
+N = len(IQ_raw_data)
+Q_raw_data_F = fft(np.array(IQ_raw_data))
+freq = fftfreq(N, 1/(5*10**5))[:N//2]
+# IQ_FFT = fftshift(fft(np.array(IQ_raw_data), n=256, axis=- 1))
+# s = (np.abs(IQ_FFT))/np.max(np.abs(IQ_FFT))
+# freq = fftshift(fftfreq(n=256))
+s = 2.0/N * np.abs(Q_raw_data_F[0:N//2])
 t_axis = freq 
 #TODO: Define frequencies axis then range axis;  Status: Done
 
@@ -102,5 +106,3 @@ plt.xlabel('Time(ms)')
 plt.ylabel('Amplitude(mV)') 
 plt.title("Wide Peaks Finding Algorithm ")
 plt.show()
-
-
