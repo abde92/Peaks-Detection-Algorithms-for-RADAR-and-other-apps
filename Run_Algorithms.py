@@ -6,7 +6,7 @@ import numpy as np
 import scipy as sp
 import pandas as pd
 import math as mth
-from scipy.fft import fft, fftfreq, fftshift
+from scipy.fftpack import fft, fftfreq, fftshift
 import matplotlib.pyplot as plt
 import FindPeaks as fp
 
@@ -32,7 +32,7 @@ s  = s + np.random.randn(L)
 # Read csv data
 # Download RADAR I/Q data : https://drive.google.com/file/d/1FiApaaWw0SeDA2giC1a6G4EUcVcLrwZ6/view?usp=sharing
 
-IQ_data = pd.read_csv('/home/vibraf/SelfLearning/Datasets/IQdata.csv', usecols = ["I", "Q"] )
+IQ_data = pd.read_csv('/home/issa/My Files/SelfLearning/Github/Datasets/IQdata.csv', usecols = ["I", "Q"] )
 IQ_raw_data = IQ_data["I"] + 1j*IQ_data["Q"]
 N = len(IQ_raw_data)
 Q_raw_data_F = fft(np.array(IQ_raw_data))
